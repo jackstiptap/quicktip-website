@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuickTip™ — Instant Digital Tipping</title>
+<meta name="description" content="Tip service workers instantly from your phone. No cash needed. Workers keep more of what they earn.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #FF7A00;
+  --primary-dark: #E06000;
+  --primary-light: #FFF3E6;
+  --navy: #0A2540;
+  --navy-light: #1A3A5C;
+  --text-secondary: #4A6A82;
+  --text-disabled: #7A9AB2;
+  --bg: #FFFFFF;
+  --surface: #F7F8FA;
+  --border: #EEF2F6;
+  --success: #34C759;
+  --error: #FF3B30;
+  --radius-sm: 14px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--navy);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 100px 0; }
+.section-label {
+  font-size: 13px; font-weight: 600; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--primary); margin-bottom: 16px;
+}
+.section-title {
+  font-size: clamp(32px, 5vw, 48px); font-weight: 700;
+  line-height: 1.15; color: var(--navy); margin-bottom: 20px;
+}
+.section-subtitle {
+  font-size: 18px; line-height: 1.6; color: var(--text-secondary); max-width: 600px;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  font-family: inherit; font-size: 16px; font-weight: 600; border: none;
+  cursor: pointer; border-radius: var(--radius-sm); padding: 16px 32px;
+  transition: all 0.2s ease; text-decoration: none;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,122,0,0.3); }
+.btn-navy { background: var(--navy); color: #fff; }
+.btn-navy:hover { background: var(--navy-light); transform: translateY(-1px); }
+.btn-outline { background: transparent; color: var(--navy); border: 2px solid var(--border); }
+.btn-outline:hover { border-color: var(--navy); transform: translateY(-1px); }
+
+/* Nav */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-size: 22px; font-weight: 700; color: var(--navy); text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-logo .logo-icon {
+  width: 36px; height: 36px; background: linear-gradient(150deg,#2A4470,#152540); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; color: #FF7A00;
+  font-size: 18px; font-weight: 700;
+}
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a { font-size: 15px; font-weight: 500; color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--navy); }
+.nav-cta {
+  font-size: 14px !important; font-weight: 600 !important; color: #fff !important;
+  background: var(--primary); padding: 10px 22px; border-radius: var(--radius-sm); transition: background 0.2s;
+}
+.nav-cta:hover { background: var(--primary-dark) !important; }
+.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+.mobile-menu-btn span { display: block; width: 24px; height: 2px; background: var(--navy); margin: 5px 0; border-radius: 2px; }
+
+/* Hero */
+.hero { padding: 160px 0 100px; position: relative; overflow: hidden; }
+.hero::before {
+  content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(255,122,0,0.06) 0%, transparent 70%); pointer-events: none;
+}
+.hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px;
+  background: var(--primary-light); color: var(--primary); font-size: 13px;
+  font-weight: 600; border-radius: var(--radius-pill); margin-bottom: 24px;
+}
+.hero-badge .dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.hero h1 { font-size: clamp(40px,6vw,64px); font-weight: 700; line-height: 1.08; color: var(--navy); margin-bottom: 24px; letter-spacing: -0.5px; }
+.hero h1 .highlight { color: var(--primary); }
+.hero p { font-size: 19px; line-height: 1.65; color: var(--text-secondary); margin-bottom: 40px; max-width: 500px; }
+.hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+
+/* Phone Mockups */
+.hero-visual { position: relative; display: flex; justify-content: center; gap: 24px; }
+.phone-frame {
+  width: 260px; height: 520px; background: var(--navy); border-radius: 36px; padding: 10px;
+  box-shadow: 0 40px 80px rgba(10,37,64,0.2); position: relative; z-index: 2; flex-shrink: 0;
+}
+.phone-frame.secondary { width: 220px; height: 460px; border-radius: 30px; padding: 8px; align-self: center; opacity: 0.9; }
+.phone-inner { width: 100%; height: 100%; background: var(--bg); border-radius: 28px; overflow: hidden; display: flex; flex-direction: column; }
+.phone-frame.secondary .phone-inner { border-radius: 24px; }
+.phone-bar { height: 44px; padding: 12px 20px 0; display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--navy); }
+.phone-body { flex: 1; padding: 12px 16px; overflow: hidden; }
+
+/* Nearby screen mockup */
+.mock-title { text-align: center; font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.mock-subtitle { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; }
+.mock-qr-bar {
+  background: var(--navy); border-radius: 12px; padding: 10px 14px; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px; color: #fff;
+}
+.mock-qr-bar .qr-icon { font-size: 18px; }
+.mock-qr-bar .qr-text { font-size: 12px; font-weight: 600; }
+.mock-qr-bar .qr-sub { font-size: 10px; opacity: 0.7; }
+.mock-qr-bar .qr-arrow { margin-left: auto; font-size: 14px; opacity: 0.6; }
+.mock-workers-label { font-size: 10px; font-weight: 600; color: var(--primary); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 10px; }
+.mock-workers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mock-worker-bubble { text-align: center; }
+.mock-worker-avatar {
+  width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 8px;
+  border: 3px solid var(--primary-light); overflow: hidden;
+  background: linear-gradient(135deg, #E8D5C0, #C4A882);
+  display: flex; align-items: center; justify-content: center; font-size: 36px;
+  padding: 0; line-height: 0;
+}
+.mock-worker-name { font-size: 14px; font-weight: 700; color: var(--navy); }
+.mock-worker-role {
+  display: inline-block; font-size: 10px; font-weight: 600; color: var(--primary);
+  border: 1.5px solid var(--primary-light); border-radius: 20px; padding: 2px 10px; margin-top: 4px;
+}
+.mock-tab-bar {
+  display: flex; justify-content: space-around; padding: 10px 8px; border-top: 1px solid var(--border);
+}
+.mock-tab { text-align: center; font-size: 9px; color: var(--text-disabled); font-weight: 600; }
+.mock-tab.active { color: var(--primary); }
+.mock-tab-icon { font-size: 16px; margin-bottom: 2px; }
+
+/* Payment screen mockup */
+.mock-pay-header { text-align: center; margin-bottom: 12px; }
+.mock-pay-header .back { font-size: 11px; color: var(--primary); text-align: left; margin-bottom: 4px; }
+.mock-pay-header h3 { font-size: 18px; font-weight: 700; color: var(--navy); }
+.mock-pay-header p { font-size: 11px; color: var(--text-secondary); }
+.mock-pay-method {
+  border: 1.5px solid var(--border); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mock-pay-method.selected { border-color: var(--primary); background: var(--primary-light); }
+.mock-pay-method .pm-label { font-size: 12px; font-weight: 700; color: var(--navy); }
+.mock-pay-method .pm-badge { font-size: 9px; font-weight: 600; color: var(--primary); background: var(--primary-light); padding: 2px 6px; border-radius: 6px; margin-left: 6px; }
+.mock-pay-method .pm-sub { font-size: 10px; color: var(--text-secondary); }
+.mock-pay-method .pm-check { width: 20px; height: 20px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+.mock-pay-method .pm-circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); }
+.mock-pay-note { font-size: 10px; color: var(--primary); margin-bottom: 12px; }
+.mock-amount-section { margin-bottom: 10px; }
+.mock-amount-label { font-size: 10px; color: var(--text-secondary); margin-bottom: 4px; }
+.mock-amount-value { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.mock-slider { width: 100%; height: 4px; background: var(--border); border-radius: 4px; position: relative; margin-bottom: 4px; }
+.mock-slider-fill { width: 22%; height: 100%; background: var(--primary); border-radius: 4px; }
+.mock-slider-thumb { width: 16px; height: 16px; background: #fff; border: 2px solid var(--primary); border-radius: 50%; position: absolute; top: -6px; left: 20%; }
+.mock-slider-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-secondary); }
+.mock-quick-amounts { display: flex; gap: 8px; margin-top: 10px; }
+.mock-quick-btn {
+  flex: 1; text-align: center; padding: 8px 0; border: 1.5px solid var(--border);
+  border-radius: 10px; font-size: 13px; font-weight: 700; color: var(--navy);
+}
+.mock-quick-btn.active { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.mock-send-btn {
+  width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none;
+  border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; margin-top: 12px; text-align: center;
+}
+
+/* Worker dashboard mockup */
+.mock-dash-name { font-size: 20px; font-weight: 700; color: var(--navy); }
+.mock-dash-role { font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; }
+.mock-visibility {
+  background: var(--primary); border-radius: 14px; padding: 14px 16px; color: #fff; margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mock-vis-label { font-size: 10px; font-weight: 600; text-transform: uppercase; opacity: 0.8; }
+.mock-vis-text { font-size: 13px; font-weight: 700; }
+.mock-vis-sub { font-size: 10px; opacity: 0.7; }
+.mock-vis-toggle { width: 40px; height: 22px; background: rgba(255,255,255,0.3); border-radius: 11px; position: relative; }
+.mock-vis-toggle::after { content: ''; position: absolute; right: 3px; top: 3px; width: 16px; height: 16px; background: #fff; border-radius: 50%; }
+.mock-stats-label { font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+.mock-stats-row { display: flex; gap: 10px; margin-bottom: 12px; }
+.mock-stat-tile {
+  flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px;
+}
+.mock-stat-tile .st-label { font-size: 9px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+.mock-stat-tile .st-value { font-size: 20px; font-weight: 700; color: var(--navy); }
+.mock-refresh-btn {
+  width: 100%; padding: 10px; background: var(--navy); color: #fff; border: none;
+  border-radius: 12px; font-size: 13px; font-weight: 600; text-align: center; margin-bottom: 14px;
+}
+.mock-backup-label { font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+.mock-backup-text { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+.mock-qr-btn {
+  width: 100%; padding: 10px; background: transparent; border: 1.5px solid var(--text-secondary);
+  border-radius: 12px; font-size: 13px; font-weight: 600; color: var(--navy); text-align: center;
+}
+
+.floating-card {
+  position: absolute; background: var(--bg); border-radius: var(--radius-md);
+  padding: 16px 20px; box-shadow: 0 12px 40px rgba(10,37,64,0.12);
+  border: 1px solid var(--border); z-index: 3; animation: float 3s ease-in-out infinite;
+}
+.floating-card-1 { top: 20px; right: -40px; }
+.floating-card-2 { bottom: 60px; left: -40px; animation-delay: 1.5s; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.floating-card .fc-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-bottom: 8px; }
+.floating-card .fc-title { font-size: 13px; font-weight: 600; color: var(--navy); }
+.floating-card .fc-value { font-size: 11px; color: var(--text-secondary); }
+
+/* Stats Bar */
+.stats-bar { background: var(--navy); padding: 60px 0; }
+.stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 40px; text-align: center; }
+.stat-item .stat-number { font-size: clamp(32px,4vw,48px); font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+.stat-item .stat-label { font-size: 15px; color: rgba(255,255,255,0.6); }
+
+/* How It Works */
+.how-it-works { background: var(--surface); }
+.steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; margin-top: 60px; }
+.step-card {
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 36px 28px; transition: all 0.3s ease;
+}
+.step-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(10,37,64,0.08); }
+.step-number {
+  width: 48px; height: 48px; background: var(--primary-light); color: var(--primary);
+  border-radius: 14px; display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700; margin-bottom: 24px;
+}
+.step-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; color: var(--navy); }
+.step-card p { font-size: 15px; line-height: 1.6; color: var(--text-secondary); }
+
+/* Dual Audience */
+.dual-section .dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 60px; }
+.audience-card {
+  border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 48px 40px;
+  transition: all 0.3s ease;
+}
+.audience-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(10,37,64,0.08); }
+.audience-card.customer { background: linear-gradient(135deg, #FFF9F2 0%, #FFFFFF 100%); }
+.audience-card.worker { background: linear-gradient(135deg, #F0F4F8 0%, #FFFFFF 100%); }
+.audience-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 24px; }
+.audience-card.customer .audience-icon { background: var(--primary-light); }
+.audience-card.worker .audience-icon { background: rgba(10,37,64,0.08); }
+.audience-card h3 { font-size: 24px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+.audience-card .audience-desc { font-size: 16px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 28px; }
+.audience-card ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.audience-card ul li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; line-height: 1.5; color: var(--navy); }
+.audience-card ul li .check { flex-shrink: 0; width: 22px; height: 22px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 12px; margin-top: 1px; }
+.audience-card.customer ul li .check { background: var(--primary-light); color: var(--primary); }
+.audience-card.worker ul li .check { background: rgba(10,37,64,0.08); color: var(--navy); }
+
+/* Case Studies */
+.case-studies { background: var(--surface); }
+.cases-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 60px; }
+.case-card {
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 32px 28px; transition: all 0.3s ease;
+}
+.case-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(10,37,64,0.08); }
+.case-emoji { font-size: 36px; margin-bottom: 20px; }
+.case-card h3 { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.case-card .case-role { font-size: 13px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 16px; }
+.case-card p { font-size: 15px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 20px; }
+.case-quote {
+  padding: 14px 16px; background: var(--surface); border-radius: var(--radius-sm);
+  font-size: 13px; font-style: italic; line-height: 1.5; color: var(--text-secondary);
+  border-left: 3px solid var(--primary);
+}
+
+/* Features */
+.features-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin-top: 60px; }
+.feature-card {
+  display: flex; align-items: flex-start; gap: 20px; padding: 32px 28px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+}
+.feature-card:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(10,37,64,0.06); }
+.feature-icon {
+  flex-shrink: 0; width: 48px; height: 48px; background: var(--primary-light);
+  border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px;
+}
+.feature-card h3 { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.feature-card p { font-size: 14px; line-height: 1.6; color: var(--text-secondary); }
+
+/* Demo */
+.demo-section { background: var(--navy); position: relative; overflow: hidden; }
+.demo-section::before {
+  content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+  width: 800px; height: 800px; background: radial-gradient(circle, rgba(255,122,0,0.1) 0%, transparent 60%);
+}
+.demo-inner { text-align: center; position: relative; z-index: 2; }
+.demo-section .section-label { color: var(--primary); }
+.demo-section .section-title { color: #fff; }
+.demo-section .section-subtitle { color: rgba(255,255,255,0.6); margin: 0 auto 48px; }
+.demo-video-wrapper {
+  max-width: 800px; margin: 0 auto; aspect-ratio: 16/9;
+  border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.demo-video-wrapper iframe {
+  width: 100%; height: 100%; border: none;
+}
+
+/* Trust */
+.trust-section { background: var(--surface); }
+.trust-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; margin-top: 60px; }
+.trust-item { text-align: center; padding: 32px 20px; }
+.trust-icon {
+  width: 56px; height: 56px; margin: 0 auto 16px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 16px; display: flex;
+  align-items: center; justify-content: center; font-size: 24px;
+}
+.trust-item h4 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.trust-item p { font-size: 13px; line-height: 1.5; color: var(--text-secondary); }
+
+/* Download / CTA */
+.download-section { background: var(--navy); text-align: center; position: relative; overflow: hidden; }
+.download-section::before {
+  content: ''; position: absolute; bottom: -150px; right: -150px; width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,122,0,0.08) 0%, transparent 60%);
+}
+.download-inner { position: relative; z-index: 2; }
+.download-section .section-title { color: #fff; }
+.download-section .section-subtitle { color: rgba(255,255,255,0.6); margin: 0 auto 40px; }
+.store-buttons { display: flex; justify-content: center; gap: 16px; margin-bottom: 40px; flex-wrap: wrap; }
+.store-btn {
+  display: inline-flex; align-items: center; gap: 12px; padding: 12px 24px;
+  background: #000; border: 1px solid #333; border-radius: 12px;
+  color: #fff; text-decoration: none; transition: all 0.2s ease; height: 56px;
+}
+.store-btn:hover { background: #1a1a1a; transform: translateY(-2px); }
+.store-btn svg { flex-shrink: 0; }
+.store-btn .store-text { text-align: left; }
+.store-btn .store-text .small { font-size: 10px; opacity: 0.8; display: block; line-height: 1.2; }
+.store-btn .store-text .big { font-size: 17px; font-weight: 600; line-height: 1.2; }
+
+/* Email Signup */
+.email-signup { max-width: 500px; margin: 0 auto; }
+.email-form { display: flex; gap: 12px; }
+.email-form input {
+  flex: 1; padding: 16px 20px; border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-sm); background: rgba(255,255,255,0.08);
+  color: #fff; font-family: inherit; font-size: 15px; outline: none;
+}
+.email-form input::placeholder { color: rgba(255,255,255,0.4); }
+.email-form input:focus { border-color: var(--primary); }
+.email-form button { padding: 16px 28px; white-space: nowrap; }
+.email-note { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 12px; }
+
+/* FAQ */
+.faq-list { max-width: 720px; margin: 60px auto 0; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-question {
+  width: 100%; text-align: left; padding: 24px 0; background: none; border: none;
+  font-family: inherit; font-size: 17px; font-weight: 600; color: var(--navy);
+  cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+}
+.faq-question .faq-toggle {
+  flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: var(--surface);
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+  color: var(--text-secondary); transition: all 0.3s ease;
+}
+.faq-item.open .faq-toggle { background: var(--primary-light); color: var(--primary); transform: rotate(45deg); }
+.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.faq-item.open .faq-answer { max-height: 300px; }
+.faq-answer p { padding: 0 0 24px; font-size: 15px; line-height: 1.7; color: var(--text-secondary); }
+
+/* Footer */
+.footer { padding: 60px 0 40px; border-top: 1px solid var(--border); }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+.footer-brand .footer-logo { font-size: 20px; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.footer-brand .footer-logo .logo-icon { width: 32px; height: 32px; background: linear-gradient(150deg,#2A4470,#152540); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #FF7A00; font-size: 15px; font-weight: 700; }
+.footer-brand p { font-size: 14px; line-height: 1.6; color: var(--text-secondary); max-width: 280px; }
+.footer-col h4 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--navy); margin-bottom: 16px; }
+.footer-col a { display: block; font-size: 14px; color: var(--text-secondary); text-decoration: none; padding: 6px 0; transition: color 0.2s; }
+.footer-col a:hover { color: var(--primary); }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center; padding-top: 32px;
+  border-top: 1px solid var(--border); font-size: 13px; color: var(--text-disabled);
+}
+.footer-bottom a { color: var(--text-disabled); text-decoration: none; }
+.footer-bottom a:hover { color: var(--primary); }
+.footer-legal { display: flex; gap: 24px; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+  .hero-visual { order: 1; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+  .steps-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .cases-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .features-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .section { padding: 72px 0; }
+  .hero { padding: 120px 0 72px; }
+  .nav-links { display: none; position: absolute; top: 72px; left: 0; right: 0; background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); flex-direction: column; padding: 24px; gap: 0; border-bottom: 1px solid var(--border); box-shadow: 0 8px 24px rgba(10,37,64,0.08); }
+  .nav-links.show { display: flex; }
+  .nav-links a { padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 16px; }
+  .nav-links a:last-child { border-bottom: none; }
+  .nav-cta { margin-top: 8px; text-align: center; border-radius: var(--radius-sm) !important; }
+  .mobile-menu-btn { display: block; }
+  .dual-section .dual-grid { grid-template-columns: 1fr; }
+  .trust-grid { grid-template-columns: repeat(2,1fr); }
+  .email-form { flex-direction: column; }
+  .store-buttons { flex-direction: column; align-items: center; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  .floating-card { display: none; }
+  .phone-frame.secondary { display: none; }
+}
+
+.fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><div class="logo-icon" style="background:linear-gradient(150deg,#2A4470,#152540);"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="DM Sans,sans-serif" font-weight="800" font-size="16" fill="#FF7A00">$</text></svg></div><span><span style="color:var(--primary);">Quick</span><span style="color:var(--navy);">Tip</span><sup style="font-size:9px;opacity:0.4;margin-left:1px;color:var(--navy);">™</sup></span></a>
+    <div class="nav-links">
+      <a href="#how-it-works">How It Works</a>
+      <a href="#customers">For You</a>
+      <a href="#workers">For Workers</a>
+      <a href="#demo">Watch Demo</a>
+      <a href="#faq">FAQ</a>
+      <a href="#download" class="nav-cta">Download</a>
+    </div>
+    <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="fade-in">
+      <div class="hero-badge"><span class="dot"></span>Now available on iOS &amp; Android</div>
+      <h1>Tip anyone,<br><span class="highlight">instantly.</span></h1>
+      <p>The cashless way to tip valets, bellhops, nail techs, caddies, and every service worker who makes your day better. No more fumbling for change or hunting down an ATM.</p>
+      <div class="hero-buttons">
+        <a href="#download" class="btn btn-primary">Download Free</a>
+        <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
+      </div>
+    </div>
+    <div class="hero-visual fade-in">
+      <!-- Primary phone: Nearby Workers -->
+      <div class="phone-frame">
+        <div class="phone-inner">
+          <div class="phone-bar"><span>9:41</span><span>●●●</span></div>
+          <div class="phone-body" style="padding: 8px 14px;">
+            <div class="mock-title">Nearby</div>
+            <div class="mock-subtitle">Workers around you</div>
+            <div class="mock-qr-bar" style="padding:8px 12px; margin-bottom:10px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/><line x1="21" y1="14" x2="21" y2="21"/><line x1="14" y1="21" x2="21" y2="21"/></svg>
+              <div><div class="qr-text">Scan QR code</div><div class="qr-sub">Can't find someone? Scan their QR.</div></div>
+              <span class="qr-arrow">›</span>
+            </div>
+            <div class="mock-workers-label">2 Workers Nearby</div>
+            <div class="mock-workers-grid">
+              <div class="mock-worker-bubble">
+                <div class="mock-worker-avatar"><img src="data:image/jpeg;base64,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" alt="Marcus T." style="width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;border-radius:50%;"></div>
+                <div class="mock-worker-name">Marcus T.</div>
+                <div class="mock-worker-role">Bellman</div>
+              </div>
+              <div class="mock-worker-bubble">
+                <div class="mock-worker-avatar"><img src="data:image/jpeg;base64,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" alt="Sarah K." style="width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;border-radius:50%;"></div>
+                <div class="mock-worker-name">Sarah K.</div>
+                <div class="mock-worker-role">Coat Check</div>
+              </div>
+            </div>
+          </div>
+          <div class="mock-tab-bar">
+            <div class="mock-tab"><div class="mock-tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>Home</div>
+            <div class="mock-tab active"><div class="mock-tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></div>Nearby</div>
+            <div class="mock-tab"><div class="mock-tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>Sent</div>
+            <div class="mock-tab"><div class="mock-tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>Settings</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secondary phone: Payment -->
+      <div class="phone-frame secondary">
+        <div class="phone-inner" style="display:flex; flex-direction:column;">
+          <div class="phone-bar" style="height:30px; padding-top:8px; flex-shrink:0;"><span style="font-size:11px;">9:41</span><span></span></div>
+          <!-- Content -->
+          <div style="flex:1; padding:3px 8px; display:flex; flex-direction:column; gap:5px;">
+            <!-- Nav bar -->
+            <div style="display:flex; align-items:center;">
+              <span style="font-size:8px; color:var(--primary); font-weight:600;">‹ Nearby</span>
+              <span style="flex:1; text-align:center; font-size:10px; font-weight:600; color:var(--navy);">Tip</span>
+              <span style="width:36px;"></span>
+            </div>
+            <!-- Header -->
+            <div style="text-align:center;">
+              <div style="font-size:15px; font-weight:700; color:var(--navy);">Tip Marcus T.</div>
+              <div style="font-size:8px; color:var(--text-secondary);">Choose your tip amount</div>
+            </div>
+
+            <!-- Payment Method Card -->
+            <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:7px; box-shadow:0 1px 4px rgba(0,0,0,0.03);">
+              <div style="font-size:7px; color:var(--text-secondary); margin-bottom:4px;">Payment method</div>
+              <div style="border:1px solid rgba(255,122,0,0.25); background:rgba(255,122,0,0.06); border-radius:8px; padding:7px; margin-bottom:5px; display:flex; align-items:center; gap:6px;">
+                <div style="flex:1;">
+                  <div style="display:flex; align-items:center; gap:3px; flex-wrap:wrap;">
+                    <span style="font-size:10px; font-weight:700; color:var(--navy);">Pay with bank</span>
+                    <span style="font-size:6px; font-weight:600; color:var(--primary); background:var(--primary-light); border:1px solid rgba(255,122,0,0.2); padding:1px 4px; border-radius:6px;">Recommended</span>
+                  </div>
+                  <div style="font-size:8px; color:var(--text-secondary); margin-top:2px;">No fees. Can take longer.</div>
+                </div>
+                <div style="width:16px;height:16px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;">✓</div>
+              </div>
+              <div style="border:1px solid var(--border); background:var(--surface); border-radius:8px; padding:7px; display:flex; align-items:center; gap:6px;">
+                <div style="flex:1;">
+                  <div style="font-size:10px; font-weight:700; color:var(--navy);">Card / Apple Pay</div>
+                  <div style="font-size:8px; color:var(--text-secondary); margin-top:2px;">Higher fee. Fast.</div>
+                </div>
+                <div style="width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;"></div>
+              </div>
+              <div style="font-size:7px; color:var(--text-secondary); margin-top:4px;">Workers receive more when you pay with bank.</div>
+            </div>
+
+            <!-- Amount Card -->
+            <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:7px; box-shadow:0 1px 4px rgba(0,0,0,0.03);">
+              <div style="font-size:7px; color:var(--text-secondary); margin-bottom:2px;">Amount</div>
+              <div style="font-size:12px; font-weight:700; color:var(--navy); margin-bottom:5px;">Selected: $10</div>
+              <div style="display:flex; align-items:center; gap:4px;">
+                <div style="width:18px;height:18px;border-radius:7px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--primary);font-weight:700;flex-shrink:0;">−</div>
+                <div style="flex:1;">
+                  <div style="position:relative; height:3px; background:var(--border); border-radius:2px;">
+                    <div style="width:22%; height:100%; background:var(--primary); border-radius:2px;"></div>
+                    <div style="width:10px;height:10px;background:#fff;border:2px solid var(--primary);border-radius:50%;position:absolute;top:-3.5px;left:20%;"></div>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; font-size:7px; color:var(--text-secondary); margin-top:3px;"><span>$1</span><span>$50</span></div>
+                </div>
+                <div style="width:18px;height:18px;border-radius:7px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--primary);font-weight:700;flex-shrink:0;">+</div>
+              </div>
+            </div>
+
+            <!-- Quick Amounts Card -->
+            <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:7px; box-shadow:0 1px 4px rgba(0,0,0,0.03);">
+              <div style="font-size:7px; color:var(--text-secondary); margin-bottom:4px;">Quick amounts</div>
+              <div style="display:flex; gap:5px;">
+                <div style="flex:1; text-align:center; padding:6px 0; border:1px solid var(--border); border-radius:8px; font-size:11px; font-weight:700; color:var(--navy); background:var(--surface);">$5</div>
+                <div style="flex:1; text-align:center; padding:6px 0; border:1px solid var(--primary); border-radius:8px; font-size:11px; font-weight:700; color:#fff; background:var(--primary);">$10</div>
+                <div style="flex:1; text-align:center; padding:6px 0; border:1px solid var(--border); border-radius:8px; font-size:11px; font-weight:700; color:var(--navy); background:var(--surface);">$20</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review & Send bar (fixed bottom like safeAreaInset) -->
+          <div style="padding:5px 8px 3px; flex-shrink:0;">
+            <div style="width:100%; padding:9px; background:var(--primary); color:#fff; border-radius:10px; font-size:12px; font-weight:700; text-align:center;">Review &amp; Send</div>
+          </div>
+
+          <!-- Tab bar -->
+          <div class="mock-tab-bar" style="padding:4px 4px 5px; flex-shrink:0;">
+            <div class="mock-tab"><div class="mock-tab-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><span style="font-size:7px;">Home</span></div>
+            <div class="mock-tab active"><div class="mock-tab-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></div><span style="font-size:7px;">Nearby</span></div>
+            <div class="mock-tab"><div class="mock-tab-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div><span style="font-size:7px;">Sent</span></div>
+            <div class="mock-tab"><div class="mock-tab-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><span style="font-size:7px;">Settings</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="floating-card floating-card-1">
+        <div class="fc-icon" style="background:#E8F8ED;">✓</div>
+        <div class="fc-title">Tip Sent!</div>
+        <div class="fc-value">$10.00 → Marcus T.</div>
+      </div>
+      <div class="floating-card floating-card-2">
+        <div class="fc-icon" style="background:var(--primary-light);">🔒</div>
+        <div class="fc-title">Secure Payments</div>
+        <div class="fc-value">Powered by Stripe</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item fade-in">
+        <div class="stat-number">68%</div>
+        <div class="stat-label">of Americans rarely carry cash</div>
+      </div>
+      <div class="stat-item fade-in">
+        <div class="stat-number">3M+</div>
+        <div class="stat-label">U.S. service workers depend on tips</div>
+      </div>
+      <div class="stat-item fade-in">
+        <div class="stat-number">$80→$8</div>
+        <div class="stat-label">tip decline per shift for hotel workers going cashless</div>
+      </div>
+      <div class="stat-item fade-in">
+        <div class="stat-number">&lt;10s</div>
+        <div class="stat-label">to send a tip with the app</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="section how-it-works" id="how-it-works">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">How It Works</div>
+      <div class="section-title">Three taps. That's it.</div>
+      <div class="section-subtitle">No cash, no awkward moments, no hunting for an ATM.</div>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card fade-in">
+        <div class="step-number">1</div>
+        <h3>Open the app</h3>
+        <p>Bluetooth Low Energy (BLE) automatically discovers service workers nearby. No scanning QR codes, no searching usernames — they just appear. Like magic.</p>
+      </div>
+      <div class="step-card fade-in">
+        <div class="step-number">2</div>
+        <h3>Pick your amount</h3>
+        <p>Choose a preset or slide to a custom amount. Pay with Apple Pay, Google Pay, a saved card, or directly from your bank account.</p>
+      </div>
+      <div class="step-card fade-in">
+        <div class="step-number">3</div>
+        <h3>Tip sent instantly</h3>
+        <p>The worker gets a push notification immediately. Funds hit their bank account on a regular payout schedule.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dual Audience -->
+<section class="section dual-section" id="customers">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Built for Both Sides</div>
+      <div class="section-title">Whether you're tipping or earning.</div>
+    </div>
+    <div class="dual-grid">
+      <div class="audience-card customer fade-in">
+        <div class="audience-icon">📱</div>
+        <h3>For Customers</h3>
+        <p class="audience-desc">No cash? No problem. Tip the people who make your experience great, right from your phone.</p>
+        <ul>
+          <li><span class="check">✓</span>Auto-discover workers nearby via Bluetooth Low Energy (BLE)</li>
+          <li><span class="check">✓</span>Apple Pay, Google Pay, saved card, or bank account</li>
+          <li><span class="check">✓</span>Pay with bank to skip card processing fees</li>
+          <li><span class="check">✓</span>See your tipping history and receipts</li>
+          <li><span class="check">✓</span>No account fees, no subscriptions — just tip and go</li>
+        </ul>
+      </div>
+      <div class="audience-card worker fade-in" id="workers">
+        <div class="audience-icon">💰</div>
+        <h3>For Service Workers</h3>
+        <p class="audience-desc">Stop losing tips because people don't carry cash. Get paid digitally from every customer.</p>
+        <ul>
+          <li><span class="check">✓</span>Set up in minutes — just download and create a profile</li>
+          <li><span class="check">✓</span>Appear automatically to nearby customers</li>
+          <li><span class="check">✓</span>Instant notifications when you receive a tip</li>
+          <li><span class="check">✓</span>Track earnings, view history, and cash out</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Case Studies -->
+<section class="section case-studies" id="case-studies">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Who It's For</div>
+      <div class="section-title">Real workers. Real tips.</div>
+      <div class="section-subtitle">From hotel lobbies to marinas, every service worker deserves a better way to get tipped.</div>
+    </div>
+    <div class="cases-grid">
+      <div class="case-card fade-in">
+        <div class="case-emoji">🚗</div>
+        <h3>Valet Parking</h3>
+        <div class="case-role">Hospitality</div>
+        <p>Guests pull up, hand off keys, and tip from the car. No fumbling for bills at a five-star entrance.</p>
+        <div class="case-quote">"Guests used to hand me a $5 or $10 every time. Now most just wave and say sorry — they don't have cash."</div>
+      </div>
+      <div class="case-card fade-in">
+        <div class="case-emoji">🛎️</div>
+        <h3>Bellhops &amp; Concierge</h3>
+        <div class="case-role">Hotels</div>
+        <p>Carry bags, give directions, make reservations — and finally get tipped for all of it, not just the bag drops.</p>
+        <div class="case-quote">"My tips went from $80 a shift to single digits once guests stopped carrying cash." — Hotel worker, SF</div>
+      </div>
+      <div class="case-card fade-in">
+        <div class="case-emoji">⛵</div>
+        <h3>Dockhands &amp; Marina Staff</h3>
+        <div class="case-role">Marine Services</div>
+        <p>Help dock, clean, and cover boats — great work, no easy way to say thanks.</p>
+        <div class="case-quote">"People want to tip us. They just never have cash when they're out on the water."</div>
+      </div>
+      <div class="case-card fade-in">
+        <div class="case-emoji">💅</div>
+        <h3>Nail Technicians</h3>
+        <div class="case-role">Beauty &amp; Wellness</div>
+        <p>Many salons are card-only now, but the tip line on a receipt doesn't always reach the individual tech.</p>
+        <div class="case-quote">"When salons went cashless, a lot of us stopped seeing direct tips entirely."</div>
+      </div>
+      <div class="case-card fade-in">
+        <div class="case-emoji">⛳</div>
+        <h3>Golf Caddies</h3>
+        <div class="case-role">Recreation</div>
+        <p>18 holes of reads, advice, and lugging a bag — caddies deserve a seamless tip, not an IOU.</p>
+        <div class="case-quote">"A round gets charged to the member's account. The caddie tip? That's supposed to be cash."</div>
+      </div>
+      <div class="case-card fade-in">
+        <div class="case-emoji">🧥</div>
+        <h3>Coat Check</h3>
+        <div class="case-role">Nightlife &amp; Events</div>
+        <p>Quick, essential service — but most guests tap their card at the door and have nothing left for the coat check.</p>
+        <div class="case-quote">"Everyone pays cover with a card now. By the time they get to us, nobody has a dollar."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Features</div>
+      <div class="section-title">Built for speed, safety, and simplicity.</div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-in">
+        <div class="feature-icon">📡</div>
+        <div><h3>BLE Discovery</h3><p>Workers appear automatically when you're nearby. No QR codes, no usernames, no friction.</p></div>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">⚡</div>
+        <div><h3>Instant Notifications</h3><p>Workers know the moment a tip comes in. Real-time push notifications on both platforms.</p></div>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🔒</div>
+        <div><h3>Bank-Grade Security</h3><p>Payments processed by Stripe. PCI-compliant. Your card details never touch our servers.</p></div>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🍎</div>
+        <div><h3>Apple Pay, Google Pay &amp; Bank</h3><p>One tap to pay with the wallet you already use. Or pay directly from your bank account — workers keep more.</p></div>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">📊</div>
+        <div><h3>Earnings Dashboard</h3><p>Workers track tips in real-time — daily, weekly, monthly. Know exactly what you've earned.</p></div>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">💸</div>
+        <div><h3>Easy Cashouts</h3><p>Workers transfer tips to their bank account anytime. No surprise fees, no minimum balance required.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Worker Dashboard Showcase -->
+<section class="section" style="background: var(--surface);" id="worker-dashboard">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
+      <div class="fade-in">
+        <div class="section-label">Worker Experience</div>
+        <div class="section-title">Toggle on. Pocket your phone. Earn.</div>
+        <div class="section-subtitle" style="margin-bottom: 28px;">Workers don't even need their phone out. Just toggle on visibility from the dashboard, put the phone in your pocket, and you'll automatically appear to nearby customers. Tips come in as push notifications.</div>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px;">
+          <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: var(--navy);">
+            <span style="flex-shrink:0; width:22px; height:22px; border-radius:7px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:12px;">✓</span>
+            One-toggle BLE broadcasting
+          </li>
+          <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: var(--navy);">
+            <span style="flex-shrink:0; width:22px; height:22px; border-radius:7px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:12px;">✓</span>
+            Real-time earnings stats at a glance
+          </li>
+          <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: var(--navy);">
+            <span style="flex-shrink:0; width:22px; height:22px; border-radius:7px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:12px;">✓</span>
+            QR code backup if BLE isn't available
+          </li>
+          <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: var(--navy);">
+            <span style="flex-shrink:0; width:22px; height:22px; border-radius:7px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:12px;">✓</span>
+            Payouts, tip history, and settings — all in one place
+          </li>
+        </ul>
+      </div>
+      <div class="fade-in" style="display: flex; justify-content: center;">
+        <div class="phone-frame">
+          <div class="phone-inner">
+            <div class="phone-bar"><span>3:04</span><span>●●●</span></div>
+            <div class="phone-body" style="padding: 8px 14px;">
+              <div class="mock-dash-name" style="font-size:18px;">Marcus T.</div>
+              <div class="mock-dash-role" style="margin-bottom:10px;">Bellman</div>
+              <div class="mock-visibility" style="padding:12px 14px; margin-bottom:12px; border-radius:12px;">
+                <div>
+                  <div class="mock-vis-label">Visibility</div>
+                  <div class="mock-vis-text" style="font-size:12px;">Visible to nearby customers</div>
+                  <div class="mock-vis-sub">Broadcasting actively</div>
+                </div>
+                <div class="mock-vis-toggle"></div>
+              </div>
+              <div class="mock-stats-label">Quick Stats</div>
+              <div class="mock-stats-row" style="gap:8px; margin-bottom:10px;">
+                <div class="mock-stat-tile" style="padding:8px 10px; border-radius:10px;"><div class="st-label">Today</div><div class="st-value" style="font-size:18px;">$96.00</div></div>
+                <div class="mock-stat-tile" style="padding:8px 10px; border-radius:10px;"><div class="st-label">Tips Today</div><div class="st-value" style="font-size:18px;">7</div></div>
+              </div>
+              <div class="mock-refresh-btn" style="padding:8px; font-size:12px; margin-bottom:12px; border-radius:10px;">↻ Refresh tips</div>
+              <div class="mock-backup-label">Backup</div>
+              <div class="mock-backup-text" style="font-size:11px; margin-bottom:6px;">Can't be found nearby? Share your QR code instead.</div>
+              <div class="mock-qr-btn" style="padding:8px; font-size:12px; border-radius:10px;">⊞ Show my QR code</div>
+            </div>
+            <div class="mock-tab-bar">
+              <div class="mock-tab active"><div class="mock-tab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>Dashboard</div>
+              <div class="mock-tab"><div class="mock-tab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>My Tips</div>
+              <div class="mock-tab"><div class="mock-tab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>Payouts</div>
+              <div class="mock-tab"><div class="mock-tab-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>Settings</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Demo -->
+<section class="section demo-section" id="demo">
+  <div class="container demo-inner">
+    <div class="section-label">See It In Action</div>
+    <div class="section-title">Watch how easy it is.</div>
+    <div class="section-subtitle">From discovering a worker to sending a tip — in under 10 seconds.</div>
+    <div class="demo-video-wrapper">
+      <iframe src="https://www.youtube.com/embed/tJDzBKWuuvY?rel=0&modestbranding=1" title="QuickTip App Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- Trust -->
+<section class="section trust-section">
+  <div class="container">
+    <div style="text-align:center;" class="fade-in">
+      <div class="section-label">Why Trust Us</div>
+      <div class="section-title">Your money is safe. Period.</div>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-item fade-in"><div class="trust-icon">🔐</div><h4>Encrypted End-to-End</h4><p>All transactions are encrypted in transit and at rest. We never store card numbers.</p></div>
+      <div class="trust-item fade-in"><div class="trust-icon">💳</div><h4>Powered by Stripe</h4><p>The same payment infrastructure used by Amazon, Google, and millions of businesses worldwide.</p></div>
+      <div class="trust-item fade-in"><div class="trust-icon">🛡️</div><h4>PCI Compliant</h4><p>We meet the highest standards for payment card security. Your data is protected.</p></div>
+      <div class="trust-item fade-in"><div class="trust-icon">📧</div><h4>Receipt for Every Tip</h4><p>Stripe sends an email receipt for every transaction. Full transparency, always.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div style="text-align:center;" class="fade-in">
+      <div class="section-label">FAQ</div>
+      <div class="section-title">Questions? We've got answers.</div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">Is the app free?<span class="faq-toggle">+</span></button>
+        <div class="faq-answer"><p>Yes — completely free for customers. Workers pay a small platform fee on tips received, designed to keep costs as low as possible for workers. Standard payment processing applies.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">How does Bluetooth Low Energy (BLE) discovery work?<span class="faq-toggle">+</span></button>
+        <div class="faq-answer"><p>Workers broadcast a Bluetooth Low Energy (BLE) signal from the worker app. When a customer opens their app nearby, available workers appear automatically — no pairing, no QR codes, no typing names. Workers don't even need their phone out — just toggle on visibility from the dashboard and put it in their pocket.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">Is my payment information safe?<span class="faq-toggle">+</span></button>
+        <div class="faq-answer"><p>Absolutely. All payments are processed by Stripe, the same platform trusted by Amazon, Shopify, and millions of businesses. Your card details are never stored on our servers — they go directly to Stripe's PCI-compliant infrastructure.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">How do workers get paid?<span class="faq-toggle">+</span></button>
+        <div class="faq-answer"><p>Workers connect a bank account through Stripe during setup. Tips accumulate in their account balance and are paid out on a regular schedule. Payouts typically arrive in 1–2 business days.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">What types of workers can use this?<span class="faq-toggle">+</span></button>
+        <div class="faq-answer"><p>Anyone who receives tips as part of their service — valets, bellhops, doormen, nail technicians, barbers, caddies, dockhands, coat check attendants, housekeeping, shuttle drivers, and more. If you get tipped, this app is for you.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">Do I need Bluetooth turned on?<span class="faq-toggle">+</span></button>
+        <div class="faq-answer"><p>Customers need Bluetooth enabled to discover workers. Workers also need Bluetooth on, but don't need to have their phone out — just toggle on visibility from the dashboard and put the phone in your pocket. Bluetooth Low Energy (BLE) has minimal battery impact. Workers can also generate a QR code as a backup option.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">What payment methods are supported?<span class="faq-toggle">+</span></button>
+        <div class="faq-answer"><p>Customers can pay with Apple Pay, Google Pay, any saved credit or debit card, or directly from their bank account. Paying with bank is recommended because it has lower processing fees — meaning workers keep more of each tip.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Download CTA -->
+<section class="section download-section" id="download">
+  <div class="container download-inner">
+    <div class="section-label">Get Started</div>
+    <div class="section-title">Download QuickTip<sup style="font-size:0.4em;vertical-align:super;opacity:0.5;">™</sup> today.</div>
+    <div class="section-subtitle">Available on iOS and Android. Free for customers, free to set up for workers.</div>
+    <div class="store-buttons">
+      <a href="#" class="store-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.79 22.05 6.8 20.68 5.96 19.47C4.25 16.56 2.93 11.3 4.7 7.72C5.57 5.94 7.36 4.86 9.28 4.84C10.56 4.81 11.78 5.72 12.57 5.72C13.36 5.72 14.85 4.62 16.4 4.8C17.07 4.83 18.89 5.08 20.06 6.79C19.95 6.86 17.61 8.17 17.64 11.04C17.67 14.45 20.59 15.57 20.62 15.58C20.59 15.66 20.12 17.28 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/></svg>
+        <div class="store-text"><span class="small">Download on the</span><span class="big">App Store</span></div>
+      </a>
+      <a href="#" class="store-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 0 1-.609-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.302 2.302a1 1 0 0 1 0 1.38l-2.302 2.302L15.2 12l2.498-2.492zM5.864 2.658L16.8 8.99l-2.302 2.302L5.864 2.658z"/></svg>
+        <div class="store-text"><span class="small">Get it on</span><span class="big">Google Play</span></div>
+      </a>
+    </div>
+    <div class="email-signup">
+      <p style="color:rgba(255,255,255,0.6);margin-bottom:16px;font-size:15px;">Or get notified when we launch in your area:</p>
+      <form class="email-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ Subscribed!'; this.querySelector('input').value='';">
+        <input type="email" placeholder="Enter your email" required>
+        <button type="submit" class="btn btn-primary">Notify Me</button>
+      </form>
+      <p class="email-note">No spam, ever. Unsubscribe anytime.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo"><div class="logo-icon" style="background:linear-gradient(150deg,#2A4470,#152540);"><svg width="17" height="17" viewBox="0 0 17 17" fill="none"><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="DM Sans,sans-serif" font-weight="800" font-size="14" fill="#FF7A00">$</text></svg></div><span><span style="color:var(--primary);">Quick</span><span style="color:var(--navy);">Tip</span><sup style="font-size:8px;opacity:0.4;margin-left:1px;color:var(--navy);">™</sup></span></div>
+        <p>The instant digital tipping platform for service workers. No cash needed.</p>
+      </div>
+      <div class="footer-col"><h4>Product</h4><a href="#how-it-works">How It Works</a><a href="#customers">For Customers</a><a href="#workers">For Workers</a><a href="#features">Features</a><a href="#demo">Watch Demo</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="javascript:void(0)" onclick="showPage('support')">Support</a><a href="mailto:support@quick-tip.com">Contact</a></div>
+      <div class="footer-col"><h4>Legal</h4><a href="javascript:void(0)" onclick="showPage('privacy')">Privacy Policy</a><a href="javascript:void(0)" onclick="showPage('terms')">Terms of Service</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 QuickTip™. All rights reserved.</span>
+      <div class="footer-legal"><a href="javascript:void(0)" onclick="showPage('privacy')">Privacy</a><a href="javascript:void(0)" onclick="showPage('terms')">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- Page Overlay (Privacy, Terms, Support, Verified) -->
+<div id="page-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;background:var(--bg);overflow-y:auto;">
+  <div style="max-width:800px;margin:0 auto;padding:0 24px;">
+    <div style="padding:24px 0;border-bottom:1px solid var(--border);margin-bottom:40px;">
+      <a href="javascript:void(0)" onclick="hidePage()" style="font-size:15px;font-weight:600;color:var(--primary);text-decoration:none;">← Back to QuickTip</a>
+    </div>
+    <div id="page-content"></div>
+    <div style="padding:40px 0;border-top:1px solid var(--border);margin-top:60px;font-size:13px;color:var(--text-disabled);">© 2026 QuickTip™. All rights reserved.</div>
+  </div>
+</div>
+
+<style>
+#page-content h1{font-size:36px;font-weight:700;color:var(--navy);margin-bottom:8px}
+#page-content .eff{font-size:14px;color:var(--text-secondary);margin-bottom:32px}
+#page-content h2{font-size:22px;font-weight:700;color:var(--navy);margin-top:40px;margin-bottom:16px}
+#page-content p{font-size:15px;line-height:1.75;color:var(--text-secondary);margin-bottom:16px}
+#page-content ul{margin:0 0 16px 24px;padding:0}
+#page-content li{font-size:15px;line-height:1.75;color:var(--text-secondary);margin-bottom:8px}
+#page-content strong{color:var(--navy);font-weight:600}
+#page-content a{color:var(--primary);text-decoration:none;font-weight:600}
+#page-content a:hover{text-decoration:underline}
+.s-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:32px;margin-bottom:24px}
+.s-card h3{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.s-card p{margin:0}
+.verified-wrap{text-align:center;padding:80px 0}
+.verified-icon{width:80px;height:80px;border-radius:50%;background:var(--success);color:#fff;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 24px}
+</style>
+
+<script>
+const observer=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&e.target.classList.add('visible')})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.fade-in').forEach(e=>observer.observe(e));
+
+const pages={
+privacy:`<h1>Privacy Policy</h1><p class="eff">Effective Date: March 23, 2026</p>
+<p>QuickTip LLC ("we," "us," or "our") operates the QuickTip mobile applications (the "Apps"). This Privacy Policy explains how we collect, use, disclose, and protect your information when you use our Apps. By using QuickTip, you agree to the collection and use of information as described in this policy. If you do not agree, please do not use the Apps.</p>
+<h2>1. Information We Collect</h2>
+<p><strong>Account Information:</strong> When you create an account, we collect your name, email address, and authentication credentials. If you sign in with Google or Apple, we receive your name and email from those providers.</p>
+<p><strong>Profile Information:</strong> We collect information you provide for your profile, including your display name, profile photo, and (for workers) your business or employer name.</p>
+<p><strong>Payment Information:</strong> We use Stripe to process payments. When you add a payment method or set up a payout account, your financial information (card numbers, bank account details) is collected and stored directly by Stripe, not by us. We receive only limited information such as the last four digits of your card or bank account, transaction amounts, and transaction status. Please refer to Stripe's Privacy Policy for details on how they handle your financial data.</p>
+<p><strong>Bluetooth Data:</strong> Our Apps use Bluetooth Low Energy (BLE) technology to enable proximity-based discovery between customers and workers. When a worker enables visibility, their device broadcasts a unique identifier over BLE. When a customer scans for nearby workers, their device detects these broadcasts. We do not collect or store Bluetooth signal data on our servers. BLE data is used solely for real-time, on-device proximity detection and is not retained after the interaction.</p>
+<p><strong>Device Information:</strong> We may collect device type, operating system version, and unique device identifiers for the purpose of providing and improving the service.</p>
+<p><strong>Usage Data:</strong> We may collect information about how you use the Apps, including tip history, transaction records, and feature usage patterns.</p>
+<h2>2. How We Use Your Information</h2>
+<p>We use the information we collect to:</p>
+<ul><li>Provide, operate, and maintain the Apps</li><li>Process tips and payments between customers and workers</li><li>Enable Bluetooth-based proximity discovery between customers and workers</li><li>Create and manage your account</li><li>Communicate with you about your account, transactions, and service updates</li><li>Detect, prevent, and address fraud, abuse, and technical issues</li><li>Comply with legal obligations</li></ul>
+<h2>3. How We Share Your Information</h2>
+<p>We do not sell your personal information. We may share your information in the following circumstances:</p>
+<p><strong>With Other Users:</strong> When a tip is sent, the recipient may see the sender's first name and last initial. Workers who enable visibility will have their display name and business name visible to nearby customers.</p>
+<p><strong>With Service Providers:</strong> We share information with third-party service providers who help us operate the Apps, including:</p>
+<ul><li>Stripe — for payment processing and identity verification</li><li>Supabase — for database hosting and authentication</li><li>Google and Apple — for authentication services</li></ul>
+<p><strong>For Legal Reasons:</strong> We may disclose your information if required by law, regulation, legal process, or governmental request, or to protect the rights, property, or safety of QuickTip, our users, or the public.</p>
+<h2>4. Data Storage and Security</h2>
+<p>Your data is stored on secure servers provided by Supabase (database and authentication) and Stripe (financial data). We implement commercially reasonable security measures to protect your information. However, no method of electronic transmission or storage is completely secure, and we cannot guarantee absolute security.</p>
+<p>Payment credentials are never stored on our servers or within the Apps. All payment data is handled directly by Stripe in compliance with PCI DSS standards.</p>
+<h2>5. Data Retention</h2>
+<p>We retain your account information and transaction history for as long as your account is active or as needed to provide services, comply with legal obligations, resolve disputes, and enforce our agreements. Transaction records may be retained for up to seven (7) years for tax and regulatory compliance.</p>
+<h2>6. Your Rights and Choices</h2>
+<p><strong>Account Deletion:</strong> You may request deletion of your account and associated personal data at any time through the Apps or by contacting us. Upon deletion, we will remove your personal information from our active systems, except where retention is required by law (such as financial transaction records required for regulatory compliance).</p>
+<p><strong>Profile Information:</strong> You can update your display name, profile photo, and other profile information at any time through the Apps.</p>
+<p><strong>Bluetooth:</strong> You can disable Bluetooth permissions for the Apps at any time through your device settings. Workers can toggle their visibility on or off within the App.</p>
+<p><strong>Marketing Communications:</strong> If we send marketing emails in the future, you will be able to opt out by following the unsubscribe instructions in those emails.</p>
+<h2>7. Children's Privacy</h2>
+<p>QuickTip is not intended for use by individuals under the age of 18. We do not knowingly collect personal information from children under 18. If we learn that we have collected information from a child under 18, we will take steps to delete that information promptly.</p>
+<h2>8. Third-Party Links and Services</h2>
+<p>The Apps may contain links to third-party websites or services (such as Stripe's onboarding pages). We are not responsible for the privacy practices of these third parties. We encourage you to review their privacy policies.</p>
+<h2>9. Changes to This Policy</h2>
+<p>We may update this Privacy Policy from time to time. We will notify you of material changes by posting the updated policy in the Apps or by other appropriate means. Your continued use of the Apps after changes are posted constitutes acceptance of the revised policy.</p>
+<h2>10. Contact Us</h2>
+<p>If you have questions about this Privacy Policy or our data practices, please contact us at:</p>
+<p>QuickTip LLC<br>Email: <a href="mailto:support@quick-tip.com">support@quick-tip.com</a><br>Website: <a href="https://quick-tip.com">quick-tip.com</a></p>`,
+
+terms:`<h1>Terms of Service</h1><p class="eff">Effective Date: March 23, 2026</p>
+<p>Welcome to QuickTip. These Terms of Service ("Terms") govern your use of the QuickTip mobile applications (the "Apps") operated by QuickTip LLC ("we," "us," or "our"). By downloading, accessing, or using the Apps, you agree to be bound by these Terms. If you do not agree, do not use the Apps.</p>
+<h2>1. Eligibility</h2>
+<p>You must be at least 18 years of age to use QuickTip. By creating an account, you represent and warrant that you are at least 18 years old and have the legal capacity to enter into these Terms. If you are using the Apps on behalf of a business, you represent that you have the authority to bind that business to these Terms.</p>
+<h2>2. Account Registration</h2>
+<p>To use QuickTip, you must create an account using a valid email address or through a supported authentication provider (Google or Apple). You are responsible for maintaining the confidentiality of your account credentials and for all activity that occurs under your account. You agree to notify us immediately of any unauthorized use of your account.</p>
+<p>We reserve the right to suspend or terminate accounts that violate these Terms, are involved in fraudulent activity, or are inactive for an extended period.</p>
+<h2>3. Description of Service</h2>
+<p>QuickTip is a mobile application that facilitates digital tipping between customers and service workers. The Apps use Bluetooth Low Energy (BLE) technology and QR codes to enable proximity-based connections between customers and workers. Customers can send tips to workers they discover nearby or via QR code scanning.</p>
+<p>QuickTip is a technology platform that facilitates tip payments. We are not a party to the tipping transaction itself. Tips are voluntary payments from customers to workers.</p>
+<h2>4. Payments and Fees</h2>
+<p><strong>Payment Processing:</strong> All payments are processed through Stripe. By using QuickTip to send or receive tips, you agree to Stripe's Terms of Service and Connected Account Agreement.</p>
+<p><strong>Tips:</strong> Tips sent through QuickTip are voluntary and non-refundable once successfully processed. Customers are responsible for ensuring the accuracy of tip amounts before confirming a transaction.</p>
+<p><strong>Worker Payouts:</strong> Workers must complete Stripe's identity verification and connect a valid bank account to receive payouts. Payout timing is subject to Stripe's processing schedules and policies.</p>
+<p><strong>Fees:</strong> QuickTip may charge service fees on transactions. Any applicable fees will be clearly disclosed before a transaction is completed. We reserve the right to modify our fee structure with reasonable notice to users.</p>
+<p><strong>Taxes:</strong> Workers are solely responsible for reporting and paying any taxes owed on tips received through QuickTip. QuickTip does not withhold taxes on behalf of workers and does not provide tax advice. Workers should consult a tax professional regarding their obligations.</p>
+<h2>5. User Conduct</h2>
+<p>You agree not to:</p>
+<ul><li>Use the Apps for any unlawful purpose or in violation of any applicable laws or regulations</li><li>Impersonate another person or entity, or falsify your identity or affiliation</li><li>Use the Apps to send fraudulent, unauthorized, or deceptive transactions</li><li>Attempt to gain unauthorized access to any part of the Apps, other accounts, or computer systems</li><li>Interfere with or disrupt the Apps or servers or networks connected to the Apps</li><li>Use automated means (bots, scrapers, etc.) to access or interact with the Apps</li><li>Harass, abuse, or harm other users</li><li>Use BLE or QR code features to track, stalk, or monitor other users</li></ul>
+<h2>6. Bluetooth and Location Features</h2>
+<p>QuickTip uses Bluetooth Low Energy (BLE) to enable workers to broadcast their availability and for customers to discover nearby workers. By enabling Bluetooth features in the Apps, you consent to your device transmitting and receiving BLE signals for this purpose.</p>
+<p>Workers who enable visibility understand that their display name and business name will be visible to nearby QuickTip customers. Workers can disable visibility at any time.</p>
+<h2>7. Intellectual Property</h2>
+<p>All content, features, and functionality of the Apps — including but not limited to text, graphics, logos, icons, and software — are owned by QuickTip LLC or its licensors and are protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, distribute, or create derivative works based on the Apps without our prior written consent.</p>
+<h2>8. Account Deletion</h2>
+<p>You may delete your account at any time through the Apps or by contacting us. Upon account deletion, we will remove your personal information in accordance with our Privacy Policy. Certain information, such as transaction records, may be retained as required by law.</p>
+<h2>9. Disclaimers</h2>
+<p>THE APPS ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.</p>
+<p>We do not warrant that the Apps will be uninterrupted, error-free, or secure. We do not guarantee the accuracy or reliability of any information obtained through the Apps.</p>
+<p>We are not responsible for the conduct of any user, whether online or offline. We do not verify the identity, background, or qualifications of workers or customers beyond the information required for account creation and payment processing.</p>
+<h2>10. Limitation of Liability</h2>
+<p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, QUICKTIP LLC AND ITS OFFICERS, DIRECTORS, EMPLOYEES, AND AGENTS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUE, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, OR GOODWILL, ARISING FROM:</p>
+<ul><li>Your use of or inability to use the Apps</li><li>Any transaction or interaction between users</li><li>Unauthorized access to or alteration of your data</li><li>Any third-party conduct or content on the Apps</li></ul>
+<p>OUR TOTAL LIABILITY FOR ANY CLAIMS ARISING FROM OR RELATED TO THESE TERMS OR YOUR USE OF THE APPS SHALL NOT EXCEED THE AMOUNT YOU PAID TO QUICKTIP IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM.</p>
+<h2>11. Indemnification</h2>
+<p>You agree to indemnify, defend, and hold harmless QuickTip LLC and its officers, directors, employees, and agents from any claims, damages, losses, liabilities, and expenses (including reasonable attorneys' fees) arising from your use of the Apps, your violation of these Terms, or your violation of any rights of another.</p>
+<h2>12. Dispute Resolution</h2>
+<p>Any disputes arising from or related to these Terms or the Apps shall be resolved through binding arbitration in accordance with the rules of the American Arbitration Association. The arbitration shall take place in the State of Florida. You agree to waive any right to participate in a class action lawsuit or class-wide arbitration.</p>
+<h2>13. Governing Law</h2>
+<p>These Terms shall be governed by and construed in accordance with the laws of the State of Florida, without regard to its conflict of laws principles.</p>
+<h2>14. Modifications to Terms</h2>
+<p>We reserve the right to modify these Terms at any time. We will provide notice of material changes through the Apps or by other appropriate means. Your continued use of the Apps after changes are posted constitutes acceptance of the revised Terms. If you do not agree to the revised Terms, you must stop using the Apps.</p>
+<h2>15. Termination</h2>
+<p>We may suspend or terminate your access to the Apps at any time, with or without cause, and with or without notice. Upon termination, your right to use the Apps ceases immediately. Sections that by their nature should survive termination (including Disclaimers, Limitation of Liability, Indemnification, and Dispute Resolution) shall survive.</p>
+<h2>16. Severability</h2>
+<p>If any provision of these Terms is found to be unenforceable or invalid, that provision shall be modified to the minimum extent necessary to make it enforceable, and the remaining provisions shall continue in full force and effect.</p>
+<h2>17. Entire Agreement</h2>
+<p>These Terms, together with our Privacy Policy, constitute the entire agreement between you and QuickTip regarding your use of the Apps and supersede any prior agreements.</p>
+<h2>18. Contact Us</h2>
+<p>If you have questions about these Terms, please contact us at:</p>
+<p>QuickTip LLC<br>Email: <a href="mailto:support@quick-tip.com">support@quick-tip.com</a><br>Website: <a href="https://quick-tip.com">quick-tip.com</a></p>`,
+
+support:`<h1>Support</h1>
+<p style="font-size:18px;line-height:1.6;color:var(--text-secondary);margin-bottom:40px;">Need help with QuickTip? We're here for you.</p>
+<div class="s-card"><h3>📧 Email Support</h3><p>For any questions, issues, or feedback, email us at <a href="mailto:support@quick-tip.com">support@quick-tip.com</a>. We typically respond within 24 hours.</p></div>
+<div class="s-card"><h3>💳 Payment Issues</h3><p>If you're experiencing issues with a payment, tip, or payout, please include your account email and a description of the issue. All payments are processed securely through Stripe.</p></div>
+<div class="s-card"><h3>📱 App Issues</h3><p>Having trouble with the app? Try closing and reopening it, or reinstalling from the App Store or Google Play. If the issue persists, contact us with your device type and a screenshot if possible.</p></div>
+<div class="s-card"><h3>🔒 Account & Privacy</h3><p>To delete your account, go to Settings in the app and tap "Delete Account." For privacy-related requests, email us at <a href="mailto:support@quick-tip.com">support@quick-tip.com</a>. See our <a href="javascript:void(0)" onclick="showPage('privacy')">Privacy Policy</a> for more details.</p></div>`,
+
+verified:`<div class="verified-wrap">
+<div class="verified-icon">✓</div>
+<h1 style="font-size:32px;margin-bottom:12px;">Email Verified!</h1>
+<p style="font-size:18px;line-height:1.6;color:var(--text-secondary);max-width:400px;margin:0 auto 32px;">Your email address has been successfully verified. You can now close this page and return to the QuickTip app.</p>
+<a href="/" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;font-size:16px;font-weight:600;border:none;cursor:pointer;border-radius:14px;padding:16px 32px;background:var(--primary);color:#fff;text-decoration:none;">Go to QuickTip</a>
+</div>`
+};
+
+function showPage(p){
+  document.getElementById('page-content').innerHTML=pages[p];
+  document.getElementById('page-overlay').style.display='block';
+  document.body.style.overflow='hidden';
+  document.getElementById('page-overlay').scrollTop=0;
+  history.pushState({page:p},'',(p==='privacy'?'/privacy-policy':p==='terms'?'/terms-of-service':'/'+p));
+}
+function hidePage(){
+  document.getElementById('page-overlay').style.display='none';
+  document.body.style.overflow='';
+  history.pushState({},'','/');
+}
+window.addEventListener('popstate',function(){
+  document.getElementById('page-overlay').style.display='none';
+  document.body.style.overflow='';
+});
+// Auto-show page based on URL path
+(function(){
+  const path=window.location.pathname;
+  if(path==='/privacy-policy'||path==='/privacy')showPage('privacy');
+  else if(path==='/terms-of-service'||path==='/terms')showPage('terms');
+  else if(path==='/support')showPage('support');
+  else if(path==='/verified')showPage('verified');
+})();
+</script>
+</body>
+</html>
