@@ -394,7 +394,7 @@ body {
 }
 .faq-item.open .faq-toggle { background: var(--primary-light); color: var(--primary); transform: rotate(45deg); }
 .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-.faq-item.open .faq-answer { max-height: 300px; }
+.faq-item.open .faq-answer { max-height: 800px; }
 .faq-answer p { padding: 0 0 24px; font-size: 15px; line-height: 1.7; color: var(--text-secondary); }
 
 /* Footer */
@@ -907,6 +907,35 @@ body {
       <div class="faq-item">
         <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">How do workers get paid?<span class="faq-toggle">+</span></button>
         <div class="faq-answer"><p>Workers connect a bank account through Stripe during setup. Tips accumulate in their account balance and are paid out on a regular schedule. Payouts typically arrive in 1–2 business days.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">How do I set up Stripe payouts as a worker?<span class="faq-toggle">+</span></button>
+        <div class="faq-answer">
+          <p>When you tap "Set up payouts" in the app, you'll be taken to Stripe to verify your identity and connect your bank. Here's what to expect:</p>
+          <div style="display:flex; flex-direction:column; gap:14px; margin-top:14px;">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="min-width:28px; height:28px; background:var(--navy); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">1</div>
+              <div><strong style="color:var(--navy);">Account type</strong> — Select "Individual" (not "Company"). This is a personal tipping account.</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="min-width:28px; height:28px; background:var(--navy); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">2</div>
+              <div><strong style="color:var(--navy);">Personal details</strong> — Enter your legal name, date of birth, and last 4 digits of your SSN. This is only for Stripe's identity verification — QuickTip never sees this information.</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="min-width:28px; height:28px; background:var(--navy); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">3</div>
+              <div><strong style="color:var(--navy);">Industry</strong> — Pick the field you work in (e.g. "Food & Beverage", "Personal Services", "Hospitality").</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="min-width:28px; height:28px; background:var(--navy); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">4</div>
+              <div><strong style="color:var(--navy);">Bank account</strong> — Link your bank to receive payouts. You can log in through your bank or enter your routing and account number manually.</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="min-width:28px; height:28px; background:var(--primary); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">✓</div>
+              <div><strong style="color:var(--navy);">Done!</strong> — Once verified, tips will be deposited directly to your bank account. Payouts typically arrive in 1–2 business days.</div>
+            </div>
+          </div>
+          <p style="font-size:13px; color:var(--text-secondary); margin-top:14px;">Your information is securely handled by Stripe and is never stored by QuickTip.</p>
+        </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">What types of workers can use this?<span class="faq-toggle">+</span></button>
