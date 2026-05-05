@@ -354,30 +354,22 @@ body {
 .download-inner { position: relative; z-index: 2; }
 .download-section .section-title { color: #fff; }
 .download-section .section-subtitle { color: rgba(255,255,255,0.6); margin: 0 auto 40px; }
-.store-buttons { display: flex; justify-content: center; gap: 16px; margin-bottom: 40px; flex-wrap: wrap; }
+.app-downloads { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; margin-bottom: 40px; }
+.app-group { text-align: center; }
+.app-group-label { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 16px; }
+.app-group-buttons { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 .store-btn {
   display: inline-flex; align-items: center; gap: 12px; padding: 12px 24px;
   background: #000; border: 1px solid #333; border-radius: 12px;
   color: #fff; text-decoration: none; transition: all 0.2s ease; height: 56px;
 }
 .store-btn:hover { background: #1a1a1a; transform: translateY(-2px); }
+.store-btn.coming-soon { opacity: 0.45; cursor: default; pointer-events: none; }
 .store-btn svg { flex-shrink: 0; }
 .store-btn .store-text { text-align: left; }
 .store-btn .store-text .small { font-size: 10px; opacity: 0.8; display: block; line-height: 1.2; }
 .store-btn .store-text .big { font-size: 17px; font-weight: 600; line-height: 1.2; }
-
-/* Email Signup */
-.email-signup { max-width: 500px; margin: 0 auto; }
-.email-form { display: flex; gap: 12px; }
-.email-form input {
-  flex: 1; padding: 16px 20px; border: 1px solid rgba(255,255,255,0.2);
-  border-radius: var(--radius-sm); background: rgba(255,255,255,0.08);
-  color: #fff; font-family: inherit; font-size: 15px; outline: none;
-}
-.email-form input::placeholder { color: rgba(255,255,255,0.4); }
-.email-form input:focus { border-color: var(--primary); }
-.email-form button { padding: 16px 28px; white-space: nowrap; }
-.email-note { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 12px; }
+.coming-soon-note { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 8px; }
 
 /* FAQ */
 .faq-list { max-width: 720px; margin: 60px auto 0; }
@@ -436,7 +428,7 @@ body {
   .dual-section .dual-grid { grid-template-columns: 1fr; }
   .trust-grid { grid-template-columns: repeat(2,1fr); }
   .email-form { flex-direction: column; }
-  .store-buttons { flex-direction: column; align-items: center; }
+  .app-downloads { flex-direction: column; align-items: center; gap: 32px; }
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
   .floating-card { display: none; }
@@ -959,23 +951,35 @@ body {
     <div class="section-label">Get Started</div>
     <div class="section-title">Download QuickTip<sup style="font-size:0.4em;vertical-align:super;opacity:0.5;">™</sup> today.</div>
     <div class="section-subtitle">Available on iOS and Android. Free for customers, free to set up for workers.</div>
-    <div class="store-buttons">
-      <a href="#" class="store-btn">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.79 22.05 6.8 20.68 5.96 19.47C4.25 16.56 2.93 11.3 4.7 7.72C5.57 5.94 7.36 4.86 9.28 4.84C10.56 4.81 11.78 5.72 12.57 5.72C13.36 5.72 14.85 4.62 16.4 4.8C17.07 4.83 18.89 5.08 20.06 6.79C19.95 6.86 17.61 8.17 17.64 11.04C17.67 14.45 20.59 15.57 20.62 15.58C20.59 15.66 20.12 17.28 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/></svg>
-        <div class="store-text"><span class="small">Download on the</span><span class="big">App Store</span></div>
-      </a>
-      <a href="#" class="store-btn">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 0 1-.609-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.302 2.302a1 1 0 0 1 0 1.38l-2.302 2.302L15.2 12l2.498-2.492zM5.864 2.658L16.8 8.99l-2.302 2.302L5.864 2.658z"/></svg>
-        <div class="store-text"><span class="small">Get it on</span><span class="big">Google Play</span></div>
-      </a>
-    </div>
-    <div class="email-signup">
-      <p style="color:rgba(255,255,255,0.6);margin-bottom:16px;font-size:15px;">Or get notified when we launch in your area:</p>
-      <form class="email-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ Subscribed!'; this.querySelector('input').value='';">
-        <input type="email" placeholder="Enter your email" required>
-        <button type="submit" class="btn btn-primary">Notify Me</button>
-      </form>
-      <p class="email-note">No spam, ever. Unsubscribe anytime.</p>
+    <div class="app-downloads">
+      <div class="app-group">
+        <div class="app-group-label">Customer App</div>
+        <div class="app-group-buttons">
+          <a href="#" class="store-btn coming-soon" title="Coming soon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.79 22.05 6.8 20.68 5.96 19.47C4.25 16.56 2.93 11.3 4.7 7.72C5.57 5.94 7.36 4.86 9.28 4.84C10.56 4.81 11.78 5.72 12.57 5.72C13.36 5.72 14.85 4.62 16.4 4.8C17.07 4.83 18.89 5.08 20.06 6.79C19.95 6.86 17.61 8.17 17.64 11.04C17.67 14.45 20.59 15.57 20.62 15.58C20.59 15.66 20.12 17.28 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/></svg>
+            <div class="store-text"><span class="small">Download on the</span><span class="big">App Store</span></div>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=com.tiptap.tiptapcustomer" class="store-btn" target="_blank" rel="noopener">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 0 1-.609-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.302 2.302a1 1 0 0 1 0 1.38l-2.302 2.302L15.2 12l2.498-2.492zM5.864 2.658L16.8 8.99l-2.302 2.302L5.864 2.658z"/></svg>
+            <div class="store-text"><span class="small">Get it on</span><span class="big">Google Play</span></div>
+          </a>
+        </div>
+        <p class="coming-soon-note">App Store — coming soon</p>
+      </div>
+      <div class="app-group">
+        <div class="app-group-label">Worker App</div>
+        <div class="app-group-buttons">
+          <a href="https://apps.apple.com/us/app/quicktip-worker-receive-tips/id6764099915" class="store-btn" target="_blank" rel="noopener">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.79 22.05 6.8 20.68 5.96 19.47C4.25 16.56 2.93 11.3 4.7 7.72C5.57 5.94 7.36 4.86 9.28 4.84C10.56 4.81 11.78 5.72 12.57 5.72C13.36 5.72 14.85 4.62 16.4 4.8C17.07 4.83 18.89 5.08 20.06 6.79C19.95 6.86 17.61 8.17 17.64 11.04C17.67 14.45 20.59 15.57 20.62 15.58C20.59 15.66 20.12 17.28 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/></svg>
+            <div class="store-text"><span class="small">Download on the</span><span class="big">App Store</span></div>
+          </a>
+          <a href="#" class="store-btn coming-soon" title="Coming soon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 0 1-.609-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.302 2.302a1 1 0 0 1 0 1.38l-2.302 2.302L15.2 12l2.498-2.492zM5.864 2.658L16.8 8.99l-2.302 2.302L5.864 2.658z"/></svg>
+            <div class="store-text"><span class="small">Get it on</span><span class="big">Google Play</span></div>
+          </a>
+        </div>
+        <p class="coming-soon-note">Google Play — coming soon</p>
+      </div>
     </div>
   </div>
 </section>
