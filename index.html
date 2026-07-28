@@ -599,7 +599,7 @@ body {
       <div class="floating-card floating-card-2">
         <div class="fc-icon" style="background:var(--primary-light);">🔒</div>
         <div class="fc-title">Secure Payments</div>
-        <div class="fc-value">Powered by Stripe</div>
+        <div class="fc-value">Powered by Square</div>
       </div>
     </div>
   </div>
@@ -869,9 +869,9 @@ body {
     </div>
     <div class="trust-grid">
       <div class="trust-item fade-in"><div class="trust-icon">🔐</div><h4>Encrypted End-to-End</h4><p>All transactions are encrypted in transit and at rest. We never store card numbers.</p></div>
-      <div class="trust-item fade-in"><div class="trust-icon">💳</div><h4>Powered by Stripe</h4><p>The same payment infrastructure used by Amazon, Google, and millions of businesses worldwide.</p></div>
+      <div class="trust-item fade-in"><div class="trust-icon">💳</div><h4>Powered by Square</h4><p>Trusted payment infrastructure used by millions of businesses worldwide. Your card details are processed securely and never touch our servers.</p></div>
       <div class="trust-item fade-in"><div class="trust-icon">🛡️</div><h4>PCI Compliant</h4><p>We meet the highest standards for payment card security. Your data is protected.</p></div>
-      <div class="trust-item fade-in"><div class="trust-icon">📧</div><h4>Receipt for Every Tip</h4><p>Stripe sends an email receipt for every transaction. Full transparency, always.</p></div>
+      <div class="trust-item fade-in"><div class="trust-icon">📧</div><h4>Receipt for Every Tip</h4><p>You'll receive an email receipt for every transaction. Full transparency, always.</p></div>
     </div>
   </div>
 </section>
@@ -894,39 +894,16 @@ body {
       </div>
       <div class="faq-item">
         <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">Is my payment information safe?<span class="faq-toggle">+</span></button>
-        <div class="faq-answer"><p>Absolutely. All payments are processed by Stripe, the same platform trusted by Amazon, Shopify, and millions of businesses. Your card details are never stored on our servers — they go directly to Stripe's PCI-compliant infrastructure.</p></div>
+        <div class="faq-answer"><p>Absolutely. All payments are processed by Square, a trusted payment platform used by millions of businesses. Your card details are never stored on our servers — they go directly to Square's PCI-compliant infrastructure.</p></div>
       </div>
       <div class="faq-item">
         <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">How do workers get paid?<span class="faq-toggle">+</span></button>
-        <div class="faq-answer"><p>Workers connect a bank account through Stripe during setup. Tips accumulate in their account balance and are paid out on a regular schedule. Payouts typically arrive in 1–2 business days.</p></div>
+        <div class="faq-answer"><p>Tips accumulate in your account balance inside the app. When you're ready, tap "Cash Out" to send your balance to your payout account. A small flat cashout fee applies.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">How do I set up Stripe payouts as a worker?<span class="faq-toggle">+</span></button>
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">How do I set up payouts as a worker?<span class="faq-toggle">+</span></button>
         <div class="faq-answer">
-          <p>When you tap "Set up payouts" in the app, you'll be taken to Stripe to verify your identity and connect your bank. Here's what to expect:</p>
-          <div style="display:flex; flex-direction:column; gap:14px; margin-top:14px;">
-            <div style="display:flex; gap:12px; align-items:flex-start;">
-              <div style="min-width:28px; height:28px; background:var(--navy); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">1</div>
-              <div><strong style="color:var(--navy);">Account type</strong> — Select "Individual" (not "Company"). This is a personal tipping account.</div>
-            </div>
-            <div style="display:flex; gap:12px; align-items:flex-start;">
-              <div style="min-width:28px; height:28px; background:var(--navy); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">2</div>
-              <div><strong style="color:var(--navy);">Personal details</strong> — Enter your legal name, date of birth, and last 4 digits of your SSN. This is only for Stripe's identity verification — QuickTip never sees this information.</div>
-            </div>
-            <div style="display:flex; gap:12px; align-items:flex-start;">
-              <div style="min-width:28px; height:28px; background:var(--navy); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">3</div>
-              <div><strong style="color:var(--navy);">Industry</strong> — Pick the field you work in (e.g. "Food & Beverage", "Personal Services", "Hospitality").</div>
-            </div>
-            <div style="display:flex; gap:12px; align-items:flex-start;">
-              <div style="min-width:28px; height:28px; background:var(--navy); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">4</div>
-              <div><strong style="color:var(--navy);">Bank account</strong> — Link your bank to receive payouts. You can log in through your bank or enter your routing and account number manually.</div>
-            </div>
-            <div style="display:flex; gap:12px; align-items:flex-start;">
-              <div style="min-width:28px; height:28px; background:var(--primary); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">✓</div>
-              <div><strong style="color:var(--navy);">Done!</strong> — Once verified, tips will be deposited directly to your bank account. Payouts typically arrive in 1–2 business days.</div>
-            </div>
-          </div>
-          <p style="font-size:13px; color:var(--text-secondary); margin-top:14px;">Your information is securely handled by Stripe and is never stored by QuickTip.</p>
+          <p>During onboarding, you'll be asked to enter your payout account details — it only takes a moment. Once set up, tips accumulate in your in-app balance and you can cash out on demand at any time by tapping "Cash Out." A small flat fee applies per cashout.</p>
         </div>
       </div>
       <div class="faq-item">
@@ -1040,7 +1017,7 @@ privacy:`<h1>Privacy Policy</h1><p class="eff">Effective Date: March 23, 2026</p
 <h2>1. Information We Collect</h2>
 <p><strong>Account Information:</strong> When you create an account, we collect your name, email address, and authentication credentials. If you sign in with Google or Apple, we receive your name and email from those providers.</p>
 <p><strong>Profile Information:</strong> We collect information you provide for your profile, including your display name, profile photo, and (for workers) your business or employer name.</p>
-<p><strong>Payment Information:</strong> We use Stripe to process payments. When you add a payment method or set up a payout account, your financial information (card numbers, bank account details) is collected and stored directly by Stripe, not by us. We receive only limited information such as the last four digits of your card or bank account, transaction amounts, and transaction status. Please refer to Stripe's Privacy Policy for details on how they handle your financial data.</p>
+<p><strong>Payment Information:</strong> We use Square to process customer payments and a third-party payout provider to send funds to workers. When you add a payment method or set up a payout account, your financial information is collected and stored directly by those providers, not by us. We receive only limited information such as transaction amounts and transaction status. Please refer to the applicable provider's Privacy Policy for details on how they handle your financial data.</p>
 <p><strong>Bluetooth Data:</strong> Our Apps use Bluetooth Low Energy (BLE) technology to enable proximity-based discovery between customers and workers. When a worker enables visibility, their device broadcasts a unique identifier over BLE. When a customer scans for nearby workers, their device detects these broadcasts. We do not collect or store Bluetooth signal data on our servers. BLE data is used solely for real-time, on-device proximity detection and is not retained after the interaction.</p>
 <p><strong>Device Information:</strong> We may collect device type, operating system version, and unique device identifiers for the purpose of providing and improving the service.</p>
 <p><strong>Usage Data:</strong> We may collect information about how you use the Apps, including tip history, transaction records, and feature usage patterns.</p>
@@ -1051,11 +1028,11 @@ privacy:`<h1>Privacy Policy</h1><p class="eff">Effective Date: March 23, 2026</p
 <p>We do not sell your personal information. We may share your information in the following circumstances:</p>
 <p><strong>With Other Users:</strong> When a tip is sent, the recipient may see the sender's first name and last initial. Workers who enable visibility will have their display name and business name visible to nearby customers.</p>
 <p><strong>With Service Providers:</strong> We share information with third-party service providers who help us operate the Apps, including:</p>
-<ul><li>Stripe — for payment processing and identity verification</li><li>Supabase — for database hosting and authentication</li><li>Google and Apple — for authentication services</li></ul>
+<ul><li>Square — for payment processing</li><li>Our payout partner — for sending funds to workers</li><li>Supabase — for database hosting and authentication</li><li>Google and Apple — for authentication services</li></ul>
 <p><strong>For Legal Reasons:</strong> We may disclose your information if required by law, regulation, legal process, or governmental request, or to protect the rights, property, or safety of QuickTip, our users, or the public.</p>
 <h2>4. Data Storage and Security</h2>
-<p>Your data is stored on secure servers provided by Supabase (database and authentication) and Stripe (financial data). We implement commercially reasonable security measures to protect your information. However, no method of electronic transmission or storage is completely secure, and we cannot guarantee absolute security.</p>
-<p>Payment credentials are never stored on our servers or within the Apps. All payment data is handled directly by Stripe in compliance with PCI DSS standards.</p>
+<p>Your data is stored on secure servers provided by Supabase (database and authentication) and our payment providers (financial data). We implement commercially reasonable security measures to protect your information. However, no method of electronic transmission or storage is completely secure, and we cannot guarantee absolute security.</p>
+<p>Payment credentials are never stored on our servers or within the Apps. All payment data is handled directly by our payment providers in compliance with PCI DSS standards.</p>
 <h2>5. Data Retention</h2>
 <p>We retain your account information and transaction history for as long as your account is active or as needed to provide services, comply with legal obligations, resolve disputes, and enforce our agreements. Transaction records may be retained for up to seven (7) years for tax and regulatory compliance.</p>
 <h2>6. Your Rights and Choices</h2>
@@ -1066,7 +1043,7 @@ privacy:`<h1>Privacy Policy</h1><p class="eff">Effective Date: March 23, 2026</p
 <h2>7. Children's Privacy</h2>
 <p>QuickTip is not intended for use by individuals under the age of 18. We do not knowingly collect personal information from children under 18. If we learn that we have collected information from a child under 18, we will take steps to delete that information promptly.</p>
 <h2>8. Third-Party Links and Services</h2>
-<p>The Apps may contain links to third-party websites or services (such as Stripe's onboarding pages). We are not responsible for the privacy practices of these third parties. We encourage you to review their privacy policies.</p>
+<p>The Apps may contain links to third-party websites or services. We are not responsible for the privacy practices of these third parties. We encourage you to review their privacy policies.</p>
 <h2>9. Changes to This Policy</h2>
 <p>We may update this Privacy Policy from time to time. We will notify you of material changes by posting the updated policy in the Apps or by other appropriate means. Your continued use of the Apps after changes are posted constitutes acceptance of the revised policy.</p>
 <h2>10. Contact Us</h2>
@@ -1084,9 +1061,9 @@ terms:`<h1>Terms of Service</h1><p class="eff">Effective Date: March 23, 2026</p
 <p>QuickTip is a mobile application that facilitates digital tipping between customers and service workers. The Apps use Bluetooth Low Energy (BLE) technology and QR codes to enable proximity-based connections between customers and workers. Customers can send tips to workers they discover nearby or via QR code scanning.</p>
 <p>QuickTip is a technology platform that facilitates tip payments. We are not a party to the tipping transaction itself. Tips are voluntary payments from customers to workers.</p>
 <h2>4. Payments and Fees</h2>
-<p><strong>Payment Processing:</strong> All payments are processed through Stripe. By using QuickTip to send or receive tips, you agree to Stripe's Terms of Service and Connected Account Agreement.</p>
+<p><strong>Payment Processing:</strong> Customer payments are processed through Square. By using QuickTip to send tips, you agree to Square's Terms of Service.</p>
 <p><strong>Tips:</strong> Tips sent through QuickTip are voluntary and non-refundable once successfully processed. Customers are responsible for ensuring the accuracy of tip amounts before confirming a transaction.</p>
-<p><strong>Worker Payouts:</strong> Workers must complete Stripe's identity verification and connect a valid bank account to receive payouts. Payout timing is subject to Stripe's processing schedules and policies.</p>
+<p><strong>Worker Payouts:</strong> Workers must set up a valid payout account to receive funds. Tips accumulate in the worker's in-app balance and can be cashed out on demand. A flat cashout fee applies per transaction. Payout timing is subject to the processing schedules of our payout provider.</p>
 <p><strong>Fees:</strong> QuickTip may charge service fees on transactions. Any applicable fees will be clearly disclosed before a transaction is completed. We reserve the right to modify our fee structure with reasonable notice to users.</p>
 <p><strong>Taxes:</strong> Workers are solely responsible for reporting and paying any taxes owed on tips received through QuickTip. QuickTip does not withhold taxes on behalf of workers and does not provide tax advice. Workers should consult a tax professional regarding their obligations.</p>
 <h2>5. User Conduct</h2>
@@ -1128,7 +1105,7 @@ terms:`<h1>Terms of Service</h1><p class="eff">Effective Date: March 23, 2026</p
 support:`<h1>Support</h1>
 <p style="font-size:18px;line-height:1.6;color:var(--text-secondary);margin-bottom:40px;">Need help with QuickTip? We're here for you.</p>
 <div class="s-card"><h3>📧 Email Support</h3><p>For any questions, issues, or feedback, email us at <a href="mailto:support@quick-tip.com">support@quick-tip.com</a>. We typically respond within 24 hours.</p></div>
-<div class="s-card"><h3>💳 Payment Issues</h3><p>If you're experiencing issues with a payment, tip, or payout, please include your account email and a description of the issue. All payments are processed securely through Stripe.</p></div>
+<div class="s-card"><h3>💳 Payment Issues</h3><p>If you're experiencing issues with a payment, tip, or payout, please include your account email and a description of the issue. All payments are processed securely.</p></div>
 <div class="s-card"><h3>📱 App Issues</h3><p>Having trouble with the app? Try closing and reopening it, or reinstalling from the App Store or Google Play. If the issue persists, contact us with your device type and a screenshot if possible.</p></div>
 <div class="s-card"><h3>🔒 Account & Privacy</h3><p>To delete your account, go to Settings in the app and tap "Delete Account." For privacy-related requests, email us at <a href="mailto:support@quick-tip.com">support@quick-tip.com</a>. See our <a href="javascript:void(0)" onclick="showPage('privacy')">Privacy Policy</a> for more details.</p></div>`,
 
